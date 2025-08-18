@@ -1,0 +1,141 @@
+-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS db_autolavado;
+USE db_autolavado;
+
+-- ------------------------------------------------
+-- Tabla tbi_roles
+-- ------------------------------------------------
+DROP TABLE IF EXISTS tbi_roles;
+CREATE TABLE tbi_roles (
+  idRol INT NOT NULL AUTO_INCREMENT,
+  nombreRol VARCHAR(45) NOT NULL,
+  PRIMARY KEY (idRol)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO tbi_roles (idRol, nombreRol) VALUES
+(1, 'Cajero'),
+(2, 'Administrador'),
+(3, 'Lavador'),
+(5, 'Gerente'),
+(8, 'Cajero'),
+(10, 'Chilin');
+
+-- ------------------------------------------------
+-- Tabla tbi_clientes
+-- ------------------------------------------------
+DROP TABLE IF EXISTS tbi_clientes;
+CREATE TABLE tbi_clientes (
+  idCliente INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(45) NOT NULL,
+  primerApellido VARCHAR(45) NOT NULL,
+  segundoApellido VARCHAR(45) DEFAULT NULL,
+  direccion VARCHAR(100) NOT NULL,
+  telefono VARCHAR(12) NOT NULL,
+  correo VARCHAR(65) NOT NULL,
+  password VARCHAR(45) NOT NULL,
+  PRIMARY KEY (idCliente)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO tbi_clientes (idCliente, nombre, primerApellido, segundoApellido, direccion, telefono, correo, password) VALUES
+(1, 'Yazmin', 'Esquivel', 'Marquez', 'Av. Terminal', '7641239194', 'yazmin@gmail.com', '1234'),
+(2, 'Andrea', 'Acosta', 'Barrios', 'Av. Allende', '7641308269', 'Andrea@gmail.com', '1234'),
+(5, 'Manuela', 'Marquez', 'Juarez', 'Av. Azaleas', '7641045686', 'manu@gmail.com', '1234');
+
+-- ------------------------------------------------
+-- Tabla tbc_usuarios
+-- ------------------------------------------------
+DROP TABLE IF EXISTS tbc_usuarios;
+CREATE TABLE tbc_usuarios (
+  idUsuario INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(45) NOT NULL,
+  primerApellido VARCHAR(45) NOT NULL,
+  segundoApellido VARCHAR(45) DEFAULT NULL,
+  direccion VARCHAR(100) NOT NULL,
+  telefono VARCHAR(15) NOT NULL,
+  correo VARCHAR(70) NOT NULL,
+  usuario VARCHAR(45) NOT NULL,
+  password VARCHAR(45) NOT NULL,
+  fechaNacimiento DATE NOT NULL,
+  idRol INT NOT NULL,
+  PRIMARY KEY (idUsuario),
+  KEY fk_idRol_idx (idRol),
+  CONSTRAINT fk_idRol FOREIGN KEY (idRol) REFERENCES tbi_roles (idRol)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci AUTO_INCREMENT=16;
+
+INSERT INTO tbc_usuarios (idUsuario, nombre, primerApellido, segundoApellido, direccion, telefono, correo, usuario, password, fechaNacimiento, idRol) VALUES
+(9, 'Yazmin', 'Esquivel', 'Marquez', 'Av. Terminal', '7641239194', 'yaz@gmail.com', 'xyaz', '1234', '2006-08-06', 2),
+(10, 'Evelia', 'Acosta', 'Barrios', 'Av. Rivera', '7641308269', 'eve@gmail.com', 'xevelia', '1234', '2002-09-07', 5),
+(11, 'Brayan', 'Esquivel', 'Marquez', 'Av. Azaleas', '7641239195', 'brayan@gmail.com', 'xbrayan', '1234', '2000-08-03', 1),
+(12, 'Oliver', 'Sanchez', 'Arrioja', 'Av. Zaragoza', '7641239196', 'oliver@gmail.com', 'xoliver', '1234', '2006-02-16', 3);
+
+-- ------------------------------------------------
+-- Tabla tbc_vehiculo
+-- ------------------------------------------------
+DROP TABLE IF EXISTS tbc_vehiculo;
+CREATE TABLE tbc_vehiculo (
+  idVehiculo INT NOT NULL AUTO_INCREMENT,
+  matricula VARCHAR(15) NOT NULL,
+  marca VARCHAR(45) NOT NULL,
+  modelo VARCHAR(45) NOT NULL,
+  color VARCHAR(45) NOT NULL,
+  year INT NOT NULL,
+  idCliente INT NOT NULL,
+  tipo VARCHAR(45) NOT NULL,
+  PRIMARY KEY (idVehiculo),
+  KEY fk_clientes_idx (idCliente),
+  CONSTRAINT fk_clientes FOREIGN KEY (idCliente) REFERENCES tbi_clientes (idCliente)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci AUTO_INCREMENT=11;
+
+INSERT INTO tbc_vehiculo (idVehiculo, matricula, marca, modelo, color, year, idCliente, tipo) VALUES
+(2, '2525AF', 'BMW', 'YZ', 'Negro', 2022, 2, 'Motocicleta'),
+(5, '415-sd', 'Nissan', 'No seee', 'Naranjoso', 2015, 1, 'Familiar'),
+(9, '1544AD-S', 'Nose ', 'Seoa', 'Verde', 2005, 5, 'Camion'),
+(10, '240235', 'BMW', 'Normal', 'Negro', 2020, 1, 'Camioneta');
+
+-- ------------------------------------------------
+-- Tabla tbi_servicios
+-- ------------------------------------------------
+DROP TABLE IF EXISTS tbi_servicios;
+CREATE TABLE tbi_servicios (
+  idServiicios INT NOT NULL AUTO_INCREMENT,
+  nombreServicio VARCHAR(45) NOT NULL,
+  descripcion VARCHAR(100) NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  estatus VARCHAR(45) DEFAULT NULL,
+  PRIMARY KEY (idServiicios)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci AUTO_INCREMENT=7;
+
+INSERT INTO tbi_servicios (idServiicios, nombreServicio, descripcion, precio, estatus) VALUES
+(2, 'Encerado', 'Vehiculo nuevo con un rayon', 300.00, 'Activo'),
+(4, 'Lavado', 'Lavado general del automovil', 150.00, 'Activo'),
+(6, 'Aspirado', 'Aspirado general', 250.00, 'Activo');
+
+-- ------------------------------------------------
+-- Tabla tbc_venta_servicios
+-- ------------------------------------------------
+DROP TABLE IF EXISTS tbc_venta_servicios;
+CREATE TABLE tbc_venta_servicios (
+  idVentaServicios INT NOT NULL AUTO_INCREMENT,
+  idUsuarioC INT NOT NULL,
+  idUsuarioO INT NOT NULL,
+  idServicio INT NOT NULL,
+  idVehiculo INT DEFAULT NULL,
+  fecha DATE NOT NULL,
+  hora TIME NOT NULL,
+  estatus VARCHAR(45) NOT NULL,
+  pagado VARCHAR(25) DEFAULT NULL,
+  PRIMARY KEY (idVentaServicios),
+  KEY fk_usuarioC_idx (idUsuarioC),
+  KEY fk_usuarioO_idx (idUsuarioO),
+  KEY fk_servicio_idx (idServicio),
+  KEY id_vehiculo_idx (idVehiculo),
+  CONSTRAINT fk_servicio FOREIGN KEY (idServicio) REFERENCES tbi_servicios (idServiicios),
+  CONSTRAINT fk_usuarioC FOREIGN KEY (idUsuarioC) REFERENCES tbc_usuarios (idUsuario),
+  CONSTRAINT fk_usuarioO FOREIGN KEY (idUsuarioO) REFERENCES tbc_usuarios (idUsuario),
+  CONSTRAINT id_vehiculo FOREIGN KEY (idVehiculo) REFERENCES tbc_vehiculo (idVehiculo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci AUTO_INCREMENT=20;
+
+INSERT INTO tbc_venta_servicios (idVentaServicios, idUsuarioC, idUsuarioO, idServicio, idVehiculo, fecha, hora, estatus, pagado) VALUES
+(15, 12, 9, 2, 2, '2004-08-16', '12:00:00', 'En espera', 'Pagado'),
+(17, 12, 9, 2, 9, '2027-08-16', '17:00:00', 'En proceso', 'Pagado'),
+(18, 12, 10, 6, 2, '2025-08-16', '17:00:00', 'Finalizado', 'Pendiente');
