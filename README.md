@@ -6,9 +6,9 @@ La base de datos se llama *db_autolavado* y contiene las siguientes tablas princ
 
 ---
 
-## 📑 Tablas y Funcionalidad
+## 📑 Formulario y Funcionalidad
 
-### 1. *tbi_roles*
+### 1. *roles*
 Almacena los diferentes *roles* de usuarios dentro del sistema.
 - idRol: Identificador único.
 - nombreRol: Nombre del rol (Ej. Cajero, Administrador, Lavador, Gerente).
@@ -17,7 +17,7 @@ Almacena los diferentes *roles* de usuarios dentro del sistema.
 
 ---
 
-### 2. *tbi_clientes*
+### 2. *clientes*
 Registra a los *clientes* que llevan sus vehículos al autolavado.
 - Datos personales: nombre, apellidos, dirección, teléfono, correo.
 - password: Clave de acceso para autenticarse (si el cliente usa el sistema).
@@ -26,7 +26,7 @@ Registra a los *clientes* que llevan sus vehículos al autolavado.
 
 ---
 
-### 3. *tbc_usuarios*
+### 3. *usuarios*
 Gestión de los *empleados y usuarios internos* del sistema.
 - Datos personales + credenciales de acceso.
 - idRol: Relación con la tabla *tbi_roles*.
@@ -35,7 +35,7 @@ Gestión de los *empleados y usuarios internos* del sistema.
 
 ---
 
-### 4. *tbc_vehiculo*
+### 4. *vehiculo*
 Registra los *vehículos de los clientes*.
 - matricula, marca, modelo, color, year, tipo.
 - Relación con el *cliente* propietario (idCliente).
@@ -44,7 +44,7 @@ Registra los *vehículos de los clientes*.
 
 ---
 
-### 5. *tbi_servicios*
+### 5. *servicios*
 Define los *servicios disponibles* en el autolavado.
 - Ejemplos: Lavado, Encerado, Aspirado.
 - Incluye precio y estatus (Activo/Inactivo).
@@ -53,7 +53,7 @@ Define los *servicios disponibles* en el autolavado.
 
 ---
 
-### 6. *tbc_venta_servicios*
+### 6. *venta_servicios*
 Historial de *ventas de servicios* realizadas.
 - idUsuarioC: Cliente que solicita el servicio.
 - idUsuarioO: Usuario/Empleado que atiende.
